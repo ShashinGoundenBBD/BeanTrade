@@ -45,7 +45,7 @@ resource "aws_db_instance" "beantradedb" {
   identifier             = "beantradedb"
   engine                 = "sqlserver-ex"
   engine_version         = "15.00.4415.2.v1"
-  instance_class         = "db.t2.micro"
+  instance_class         = "db.t3.micro"
   allocated_storage      = 20
   storage_type           = "gp2"
   publicly_accessible    = true
