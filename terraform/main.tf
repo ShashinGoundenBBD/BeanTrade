@@ -57,3 +57,13 @@ resource "aws_db_instance" "beantradedb" {
     Name = "beantradedb"
   }
 }
+
+output "db_host" {
+  value = aws_db_instance.sql_server_rds.endpoint
+  description = "The endpoint of the SQL Server RDS instance"
+}
+
+output "db_name" {
+  value = aws_db_instance.sql_server_rds.db_name
+  description = "The database name"
+}
