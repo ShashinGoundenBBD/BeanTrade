@@ -40,8 +40,6 @@ resource "aws_db_instance" "beantradedb" {
   username               = var.db_username
   password               = var.db_password
   skip_final_snapshot    = true
-  db_name                = "beantradedb"
-
   tags = {
     Name = "beantradedb"
   }
@@ -53,6 +51,6 @@ output "db_host" {
 }
 
 output "db_name" {
-  value = aws_db_instance.beantradedb.db_name
+  value = aws_db_instance.beantradedb.tags.Name
   description = "The database name"
 }
