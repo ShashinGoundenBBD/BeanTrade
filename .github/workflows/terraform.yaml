@@ -43,19 +43,13 @@ jobs:
         id: tf_outputs
         run: |
           echo "DB_HOST=$(terraform output -raw db_host)" >> $GITHUB_ENV
-          echo "DB_NAME=$(terraform output -raw db_name)" >> $GITHUB_ENV
-
-      - name: Install Flyway
-        run: |
-          curl -L "https://repo1.maven.org/maven2/org/flywaydb/flyway-commandline/9.2.1/flyway-commandline-9.2.1-linux-x64.tar.gz" | tar xz
-          export PATH="$(pwd)/flyway-9.2.1:$PATH"
 
       - name: Run Flyway Migrations
         run: |
           docker run --rm \
             -v ${{ github.workspace }}/migrations:/flyway/sql \
             flyway/flyway \
-            -url="jdbc:sqlserver://${{ env.DB_HOST }};databaseName=${{ env.DB_NAME }};encrypt=true;trustServerCertificate=true" \
+            -url="jdbc:sqlserver://${{ env.DB_HOST }};databaseName=BeanTrade;encrypt=true;trustServerCertificate=true" \
             -user="${{ secrets.TF_VAR_DB_USERNAME }}" \
             -password="${{ secrets.TF_VAR_DB_PASSWORD }}" \
             migrate
