@@ -30,7 +30,7 @@ resource "aws_default_subnet" "subnet_az2" {
 }
 
 resource "aws_security_group" "allow_mssql" {
-  name        = "allow_mssql"
+  name_prefix = "allow_mssql_"
 
   ingress {
     from_port   = 1433
