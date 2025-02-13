@@ -8,7 +8,7 @@ terraform {
 }
 
 provider "aws" {
-  region = "af-south-1"
+  region =  "af-south-1"
 }
 
 resource "aws_default_vpc" "default_vpc" {
@@ -29,8 +29,19 @@ resource "aws_default_subnet" "subnet_az2" {
   availability_zone = data.aws_availability_zones.available_zones.names[1]
 }
 
-resource "aws_db_instance" "beantradedb" {
-  identifier             = "beantradedb"
+resource "aws_security_group" "allow_mssql" {
+  name_prefix = "allow_mssql_"
+
+  ingress {
+    from_port   = 1433
+    to_port     = 1433
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+}
+
+resource "aws_db_instance" "beantradedb7" {
+  identifier             = "beantradedb7"
   engine                 = "sqlserver-ex"
   engine_version         = "15.00.4415.2.v1"
   instance_class         = "db.t3.micro"
@@ -40,17 +51,25 @@ resource "aws_db_instance" "beantradedb" {
   username               = var.db_username
   password               = var.db_password
   skip_final_snapshot    = true
+  vpc_security_group_ids = [aws_security_group.allow_mssql.id]
   tags = {
-    Name = "beantradedb"
+    Name = "beantradedb7"
+  }
+
+  provisioner "local-exec" {
+    command = <<-EOT
+      sqlcmd -S ${self.endpoint} -U ${self.username} -P '${self.password}' -Q "CREATE DATABASE BeanTrade;";
+    EOT
+    interpreter = ["pwsh", "-Command"]
   }
 }
 
 output "db_host" {
-  value = aws_db_instance.beantradedb.endpoint
+  value = aws_db_instance.beantradedb7.endpoint
   description = "The endpoint of the SQL Server RDS instance"
 }
 
 output "db_name" {
-  value = aws_db_instance.beantradedb.tags.Name
+  value = aws_db_instance.beantradedb7.db_name
   description = "The database name"
 }
