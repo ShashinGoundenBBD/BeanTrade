@@ -60,6 +60,7 @@ resource "aws_db_instance" "beantradedb4" {
     command = <<-EOT
       sqlcmd -S ${self.endpoint} -U ${self.username} -P '${self.password}' -Q "CREATE DATABASE BeanTrade;";
     EOT
+    interpreter = ["PowerShell", "-Command"]
   }
 }
 
