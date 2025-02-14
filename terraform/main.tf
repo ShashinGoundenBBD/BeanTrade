@@ -40,8 +40,8 @@ resource "aws_security_group" "allow_mssql" {
   }
 }
 
-resource "aws_db_instance" "beantradedb10" {
-  identifier             = "beantradedb10"
+resource "aws_db_instance" "beantradedb11" {
+  identifier             = "beantradedb11"
   engine                 = "sqlserver-ex"
   engine_version         = "15.00.4415.2.v1"
   instance_class         = "db.t3.micro"
@@ -53,23 +53,23 @@ resource "aws_db_instance" "beantradedb10" {
   skip_final_snapshot    = true
   vpc_security_group_ids = [aws_security_group.allow_mssql.id]
   tags = {
-    Name = "beantradedb10"
+    Name = "beantradedb11"
   }
 
   provisioner "local-exec" {
     command = <<-EOT
-      sqlcmd -S ${self.endpoint} -U ${self.username} -P '${self.password}' -Q "CREATE DATABASE BeanTrade;";
+      sqlcmd -S ${replace(self.endpoint, ":", ",")} -U ${self.username} -P '${self.password}' -C -Q "CREATE DATABASE BeanTrade;";
     EOT
     interpreter = ["pwsh", "-Command"]
   }
 }
 
 output "db_host" {
-  value = aws_db_instance.beantradedb10.endpoint
+  value = aws_db_instance.beantradedb11.endpoint
   description = "The endpoint of the SQL Server RDS instance"
 }
 
 output "db_name" {
-  value = aws_db_instance.beantradedb10.db_name
+  value = aws_db_instance.beantradedb11.db_name
   description = "The database name"
 }
