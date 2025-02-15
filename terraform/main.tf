@@ -7,8 +7,6 @@ terraform {
   }
 
   backend "s3" {
-    bucket  = "beantrades3"
-    key     = "key/terraform.tfstate"
     region  = "af-south-1"
   }
 }
@@ -46,8 +44,8 @@ resource "aws_security_group" "allow_mssql" {
   }
 }
 
-resource "aws_db_instance" "beantradeshashin" {
-  identifier             = "beantradeshashin"
+resource "aws_db_instance" "beantradedb" {
+  identifier             = "beantradedb"
   engine                 = "sqlserver-ex"
   engine_version         = "15.00.4415.2.v1"
   instance_class         = "db.t3.micro"
@@ -59,7 +57,7 @@ resource "aws_db_instance" "beantradeshashin" {
   skip_final_snapshot    = true
   vpc_security_group_ids = [aws_security_group.allow_mssql.id]
   tags = {
-    Name = "beantradeshashin"
+    Name = "beantradedb"
   }
 
   provisioner "local-exec" {
@@ -71,11 +69,6 @@ resource "aws_db_instance" "beantradeshashin" {
 }
 
 output "db_host" {
-  value = aws_db_instance.beantradeshashin.endpoint
+  value = aws_db_instance.beantradedb.endpoint
   description = "The endpoint of the SQL Server RDS instance"
-}
-
-output "db_name" {
-  value = aws_db_instance.beantradeshashin.db_name
-  description = "The database name"
 }

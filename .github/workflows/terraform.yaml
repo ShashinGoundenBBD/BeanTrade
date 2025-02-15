@@ -12,6 +12,8 @@ jobs:
     env:
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      AWS_BUCKET_KEY: ${{ secrets.AWS_BUCKET_KEY}}
+      AWS_BUCKET_NAME: ${{ secrets.AWS_BUCKET_NAME}}
       TF_VAR_db_password: ${{ secrets.TF_VAR_DB_PASSWORD }}
       TF_VAR_db_username: ${{ secrets.TF_VAR_DB_USERNAME }}
     defaults:
@@ -29,7 +31,7 @@ jobs:
 
       - name: Terraform Init
         id: init
-        run: terraform init -backend-config="bucket=beantrades3" -backend-config="key=key/terraform.tfstate" -backend-config="region=af-south-1"
+        run: terraform init -backend-config="${{ secrets.AWS_BUCKET_NAME}}" -backend-config="${{ secrets.AWS_BUCKET_KEY}}" -backend-config="region=af-south-1"
 
       - name: Terraform Plan
         id: plan
