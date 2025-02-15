@@ -12,7 +12,6 @@ jobs:
     env:
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      AWS_SESSION_TOKEN: ${{ secrets.AWS_SESSION_TOKEN }}
       TF_VAR_db_password: ${{ secrets.TF_VAR_DB_PASSWORD }}
       TF_VAR_db_username: ${{ secrets.TF_VAR_DB_USERNAME }}
     defaults:
@@ -46,10 +45,4 @@ jobs:
 
       - name: Run Flyway Migrations
         run: |
-          docker run --rm \
-            -v ${{ github.workspace }}/migrations:/flyway/sql \
-            flyway/flyway \
-            -url="jdbc:sqlserver://${{ env.DB_HOST }};databaseName=BeanTrade;encrypt=true;trustServerCertificate=true" \
-            -user="${{ secrets.TF_VAR_DB_USERNAME }}" \
-            -password="${{ secrets.TF_VAR_DB_PASSWORD }}" \
-            migrate
+          docker run --rm --volume ${{ github.workspace }}/migrations:/flyway/sql:ro redgate/flyway -url="jdbc:sqlserver://${{ env.DB_HOST }};databaseName=BeanTrade;encrypt=false;trustServerCertificate=true;" -user="${{ secrets.TF_VAR_DB_USERNAME }}" -password="${{ secrets.TF_VAR_DB_PASSWORD }}" migrate

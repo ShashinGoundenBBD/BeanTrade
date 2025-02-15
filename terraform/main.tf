@@ -40,8 +40,8 @@ resource "aws_security_group" "allow_mssql" {
   }
 }
 
-resource "aws_db_instance" "beantradedb11" {
-  identifier             = "beantradedb11"
+resource "aws_db_instance" "beantradedbtest" {
+  identifier             = "beantradedbtest"
   engine                 = "sqlserver-ex"
   engine_version         = "15.00.4415.2.v1"
   instance_class         = "db.t3.micro"
@@ -53,7 +53,7 @@ resource "aws_db_instance" "beantradedb11" {
   skip_final_snapshot    = true
   vpc_security_group_ids = [aws_security_group.allow_mssql.id]
   tags = {
-    Name = "beantradedb11"
+    Name = "beantradedbtest"
   }
 
   provisioner "local-exec" {
@@ -65,11 +65,11 @@ resource "aws_db_instance" "beantradedb11" {
 }
 
 output "db_host" {
-  value = aws_db_instance.beantradedb11.endpoint
+  value = aws_db_instance.beantradedbtest.endpoint
   description = "The endpoint of the SQL Server RDS instance"
 }
 
 output "db_name" {
-  value = aws_db_instance.beantradedb11.db_name
+  value = aws_db_instance.beantradedbtest.db_name
   description = "The database name"
 }
