@@ -1,9 +1,0 @@
-[flyway]
-locations = ["migrations"]
-cleanDisabled = false
-
-[environments.default]
-locations = ["migrations"]
-url = "jdbc:sqlserver://beantradedb.cgj0ywhm1m7p.af-south-1.rds.amazonaws.com;database=BeanTrade;encrypt=true;trustServerCertificate=true;"
-user = "BeanTradeAdmin"
-password = "!Bean$Trade7"
