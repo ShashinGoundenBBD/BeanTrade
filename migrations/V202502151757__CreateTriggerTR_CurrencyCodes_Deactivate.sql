@@ -2,6 +2,7 @@ IF EXISTS (SELECT * FROM sys.objects WHERE [name] = N'TR_CurrencyCodes_Deactivat
 BEGIN
       DROP TRIGGER [dbo].[TR_CurrencyCodes_Deactivate];
 END;
+GO
 
 -- Create trigger for currency deactivation
 CREATE OR ALTER TRIGGER TR_CurrencyCodes_Deactivate

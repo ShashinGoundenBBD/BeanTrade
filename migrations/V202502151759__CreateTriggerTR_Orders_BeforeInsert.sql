@@ -2,6 +2,7 @@ IF EXISTS (SELECT * FROM sys.objects WHERE [name] = N'TR_Orders_BeforeInsert' AN
 BEGIN
       DROP TRIGGER [dbo].[TR_Orders_BeforeInsert];
 END;
+GO
 
 -- BeforeInsert of order trigger, checks balances + inventories and isActive for currency + beans
 CREATE OR ALTER TRIGGER TR_Orders_BeforeInsert

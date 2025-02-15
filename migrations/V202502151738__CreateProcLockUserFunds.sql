@@ -5,6 +5,7 @@ IF EXISTS ( SELECT *
 BEGIN
     DROP PROCEDURE [dbo].[LockUserFunds]
 END
+GO
 
 
 CREATE PROCEDURE LockUserFunds

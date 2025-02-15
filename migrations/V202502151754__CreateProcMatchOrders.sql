@@ -5,6 +5,7 @@ IF EXISTS ( SELECT *
 BEGIN
     DROP PROCEDURE [dbo].[MatchOrders]
 END
+GO
 
 CREATE OR ALTER PROCEDURE MatchOrders
     @OrderID BIGINT

@@ -2,6 +2,7 @@ IF EXISTS (SELECT * FROM sys.objects WHERE [name] = N'TR_Users_Deactivate' AND [
 BEGIN
       DROP TRIGGER [dbo].[TR_Users_Deactivate];
 END;
+GO
 
 -- Create trigger for user deactivation
 CREATE OR ALTER TRIGGER TR_Users_Deactivate

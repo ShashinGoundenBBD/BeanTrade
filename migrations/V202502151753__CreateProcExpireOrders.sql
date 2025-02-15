@@ -5,6 +5,8 @@ IF EXISTS ( SELECT *
 BEGIN
     DROP PROCEDURE [dbo].[ExpireOrders]
 END
+GO
+
 
 -- Add helper procedure to expire orders
 CREATE OR ALTER PROCEDURE ExpireOrders

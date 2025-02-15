@@ -2,6 +2,7 @@ IF EXISTS (SELECT * FROM sys.objects WHERE [name] = N'TR_Orders_UpdateStatus' AN
 BEGIN
       DROP TRIGGER [dbo].[TR_Orders_UpdateStatus];
 END;
+GO
 
 -- Enhance the UpdateStatus trigger to handle all status changes
 CREATE OR ALTER TRIGGER TR_Orders_UpdateStatus

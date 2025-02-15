@@ -5,6 +5,7 @@ IF EXISTS ( SELECT *
 BEGIN
     DROP PROCEDURE [dbo].[LockUserInventory]
 END
+GO
 
 -- Helper procedure to lock inventory for sell orders
 CREATE PROCEDURE LockUserInventory

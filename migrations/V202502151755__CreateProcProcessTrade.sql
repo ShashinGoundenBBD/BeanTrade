@@ -5,6 +5,7 @@ IF EXISTS ( SELECT *
 BEGIN
     DROP PROCEDURE [dbo].[ProcessTrade]
 END
+GO
 
 CREATE OR ALTER PROCEDURE ProcessTrade
     @BuyOrderID BIGINT,

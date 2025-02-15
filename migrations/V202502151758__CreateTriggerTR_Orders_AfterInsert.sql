@@ -2,6 +2,7 @@ IF EXISTS (SELECT * FROM sys.objects WHERE [name] = N'TR_Orders_AfterInsert' AND
 BEGIN
       DROP TRIGGER [dbo].[TR_Orders_AfterInsert];
 END;
+GO
 
 -- Create AfterInsert trigger - This calls our match procedure.
 CREATE OR ALTER TRIGGER TR_Orders_AfterInsert

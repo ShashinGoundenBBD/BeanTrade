@@ -2,6 +2,7 @@ IF EXISTS (SELECT * FROM sys.objects WHERE [name] = N'TR_Beans_Deactivate' AND [
 BEGIN
       DROP TRIGGER [dbo].[TR_Beans_Deactivate];
 END;
+GO
 
 -- Create trigger for bean deactivation
 CREATE OR ALTER TRIGGER TR_Beans_Deactivate
