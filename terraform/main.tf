@@ -5,6 +5,12 @@ terraform {
       version = "~> 5.0"
     }
   }
+
+  backend "s3" {
+    bucket  = "beantrades3"
+    key     = "key/terraform.tfstate"
+    region  = "af-south-1"
+  }
 }
 
 provider "aws" {
