@@ -1,0 +1,12 @@
+IF OBJECT_ID('dbo.Trades','U') IS NOT NULL
+    DROP TABLE dbo.Trades
+GO
+
+CREATE TABLE [Trades] (
+  [TradeID] INT PRIMARY KEY IDENTITY(1, 1),
+  [BuyOrderID] BIGINT NOT NULL,
+  [SellOrderID] BIGINT NOT NULL,
+  [Quantity] INT NOT NULL,
+  [CreatedAt] DATETIME2 DEFAULT (GETUTCDATE())
+)
+GO
