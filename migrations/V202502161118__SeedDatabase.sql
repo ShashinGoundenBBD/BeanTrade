@@ -12,7 +12,11 @@ GO
 -- Insert test users (100 users)
 INSERT INTO Users (IsActive)
 SELECT 1
-FROM GENERATE_SERIES(1, 100);
+FROM (
+    SELECT TOP 100 
+        ROW_NUMBER() OVER (ORDER BY (SELECT NULL)) AS number
+    FROM master.dbo.spt_values t1
+) t;
 GO
 
 -- Insert currencies
