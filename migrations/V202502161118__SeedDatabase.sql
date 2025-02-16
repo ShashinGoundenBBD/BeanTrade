@@ -18,7 +18,7 @@ GO
 -- Insert currencies
 INSERT INTO CurrencyCodes (CurrencyCode, Name)
 VALUES 
-    ('ZAR', 'SA Rand')
+    ('ZAR', 'SA Rand'),
     ('USD', 'US Dollar'),
     ('EUR', 'Euro');
 GO
