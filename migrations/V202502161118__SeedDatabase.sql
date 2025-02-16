@@ -1,11 +1,3 @@
--- Clear existing data
-DELETE FROM OrderTypes;
-DELETE FROM TransactionTypes;
-DELETE FROM OrderStatuses;
-DELETE FROM Beans;
-DELETE FROM CurrencyCodes;
-GO
-
 -- Insert currencies
 INSERT INTO CurrencyCodes (CurrencyCode, Name)
 VALUES 
