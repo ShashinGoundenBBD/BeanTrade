@@ -7,13 +7,13 @@ on:
 
 jobs:
   terraform:
-    name: "Terraform"
+    name: "Manage aws resources"
     runs-on: ubuntu-22.04
+    outputs:
+      dbhost: ${{ steps.tf_outputs.db_host }}
     env:
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      AWS_BUCKET_NAME: ${{ secrets.AWS_BUCKET_NAME}}
-      AWS_BUCKET_KEY:  ${{ secrets.AWS_BUCKET_KEY}}
       TF_VAR_db_password: ${{ secrets.TF_VAR_DB_PASSWORD }}
       TF_VAR_db_username: ${{ secrets.TF_VAR_DB_USERNAME }}
     defaults:
@@ -31,7 +31,7 @@ jobs:
 
       - name: Terraform Init
         id: init
-        run: terraform init -backend-config="bucket=${{ secrets.AWS_BUCKET_NAME}}" -backend-config="key=${{ secrets.AWS_BUCKET_KEY}}" -backend-config="region=af-south-1"
+        run: terraform init -backend-config="bucket=beantrades3" -backend-config="key=key/terraform.tfstate" -backend-config="region=af-south-1"
 
       - name: Terraform Plan
         id: plan
@@ -43,8 +43,16 @@ jobs:
       - name: Capture Terraform Outputs
         id: tf_outputs
         run: |
-          echo "DB_HOST=$(terraform output -raw db_host)" >> $GITHUB_ENV
+          echo "db_host=$(terraform output -raw db_host)" >> $GITHUB_OUTPUT
+jobs:
+  needs: terraform
+  flyway-migrations:
+    name: Flyway migrations
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+      - uses: actions/checkout@v4
 
       - name: Run Flyway Migrations
         run: |
-          docker run --rm --volume ${{ github.workspace }}/migrations:/flyway/sql:ro redgate/flyway -url="jdbc:sqlserver://${{ env.DB_HOST }};databaseName=BeanTrade;encrypt=false;trustServerCertificate=true;" -user="${{ secrets.TF_VAR_DB_USERNAME }}" -password="${{ secrets.TF_VAR_DB_PASSWORD }}" migrate
+          docker run --rm --volume ${{ github.workspace }}/migrations:/flyway/sql:ro redgate/flyway -url="jdbc:sqlserver://${{ needs.terraform.outputs.dbhost }};databaseName=BeanTrade;encrypt=false;trustServerCertificate=true;" -user="${{ secrets.TF_VAR_DB_USERNAME }}" -password="${{ secrets.TF_VAR_DB_PASSWORD }}" migrate
