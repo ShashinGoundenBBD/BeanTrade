@@ -7,8 +7,10 @@ on:
 
 jobs:
   terraform:
-    name: "Terraform"
+    name: "Manage aws resources"
     runs-on: ubuntu-22.04
+    outputs:
+      dbhost: ${{ steps.tf_outputs.db_host }}
     env:
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
@@ -43,8 +45,16 @@ jobs:
       - name: Capture Terraform Outputs
         id: tf_outputs
         run: |
-          echo "DB_HOST=$(terraform output -raw db_host)" >> $GITHUB_ENV
+          echo "db_host=$(terraform output -raw db_host)" >> $GITHUB_OUTPUT
+jobs:
+  needs: terraform
+  flyway-migrations:
+    name: Flyway migrations
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+      - uses: actions/checkout@v4
 
       - name: Run Flyway Migrations
         run: |
-          docker run --rm --volume ${{ github.workspace }}/migrations:/flyway/sql:ro redgate/flyway -url="jdbc:sqlserver://${{ env.DB_HOST }};databaseName=BeanTrade;encrypt=false;trustServerCertificate=true;" -user="${{ secrets.TF_VAR_DB_USERNAME }}" -password="${{ secrets.TF_VAR_DB_PASSWORD }}" migrate
+          docker run --rm --volume ${{ github.workspace }}/migrations:/flyway/sql:ro redgate/flyway -url="jdbc:sqlserver://${{ needs.terraform.outputs.dbhost }};databaseName=BeanTrade;encrypt=false;trustServerCertificate=true;" -user="${{ secrets.TF_VAR_DB_USERNAME }}" -password="${{ secrets.TF_VAR_DB_PASSWORD }}" migrate
