@@ -54,8 +54,7 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
 
-      - name: Run Flyway Migrations
       - env:
-        DB_HOST: ${{needs.terraform.outputs.dbhost}}
+          DB_HOST: ${{needs.terraform.outputs.dbhost}}
         run: |
           docker run --rm --volume ${{ github.workspace }}/migrations:/flyway/sql:ro redgate/flyway -url="jdbc:sqlserver://$DB_HOST;databaseName=BeanTrade;encrypt=false;trustServerCertificate=true;" -user="${{ secrets.TF_VAR_DB_USERNAME }}" -password="${{ secrets.TF_VAR_DB_PASSWORD }}" migrate
