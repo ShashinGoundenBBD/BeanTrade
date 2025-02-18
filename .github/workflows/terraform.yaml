@@ -23,10 +23,10 @@ jobs:
         working-directory: terraform
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v1
+        uses: hashicorp/setup-terraform@v3
         with:
           terraform_version: 1.0.1
           terraform_wrapper: false
@@ -46,14 +46,13 @@ jobs:
         id: tf_outputs
         run: |
           echo "db_host=$(terraform output -raw db_host)" >> $GITHUB_OUTPUT
-jobs:
-  needs: terraform
-  flyway-migrations:
+  flyway:
+    needs: terraform
     name: Flyway migrations
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
-      - uses: actions/checkout@v4
+        uses: actions/checkout@v4
 
       - name: Run Flyway Migrations
         run: |
