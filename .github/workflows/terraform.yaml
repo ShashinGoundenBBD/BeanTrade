@@ -50,6 +50,8 @@ jobs:
     needs: terraform
     name: Flyway migrations
     runs-on: ubuntu-latest
+    env:
+      RESTRICTED_USER_PASSWORD: ${{ secrets.DB_RESTRICTED_USER_PASSWORD }}
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
