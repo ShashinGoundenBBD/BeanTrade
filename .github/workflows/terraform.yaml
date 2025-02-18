@@ -10,7 +10,7 @@ jobs:
     name: "Manage aws resources"
     runs-on: ubuntu-22.04
     outputs:
-      dbhost: ${{ steps.gen_output.tf_outputs.db_host }}
+      dbhost: ${{ steps.tf_outputs.db_host }}
     env:
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
@@ -51,9 +51,11 @@ jobs:
     name: Flyway migrations
     runs-on: ubuntu-latest
     steps:
+      - env:
+        DB_HOST: ${{needs.terraform.outputs.dbhost}}
       - name: Checkout repo
         uses: actions/checkout@v4
 
       - name: Run Flyway Migrations
         run: |
-          docker run --rm --volume ${{ github.workspace }}/migrations:/flyway/sql:ro redgate/flyway -url="jdbc:sqlserver://${{ needs.terraform.outputs.dbhost }};databaseName=BeanTrade;encrypt=false;trustServerCertificate=true;" -user="${{ secrets.TF_VAR_DB_USERNAME }}" -password="${{ secrets.TF_VAR_DB_PASSWORD }}" migrate
+          docker run --rm --volume ${{ github.workspace }}/migrations:/flyway/sql:ro redgate/flyway -url="jdbc:sqlserver://$DB_HOST;databaseName=BeanTrade;encrypt=false;trustServerCertificate=true;" -user="${{ secrets.TF_VAR_DB_USERNAME }}" -password="${{ secrets.TF_VAR_DB_PASSWORD }}" migrate
