@@ -46,15 +46,15 @@ jobs:
         id: tf_outputs
         run: |
           echo "db_host=$(terraform output -raw db_host)" >> $GITHUB_OUTPUT
-jobs:
-  needs: terraform
-  flyway-migrations:
-    name: Flyway migrations
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repo
-      - uses: actions/checkout@v4
+  flyway:
+    needs: terraform
+    flyway-migrations:
+      name: Flyway migrations
+      runs-on: ubuntu-latest
+      steps:
+        - name: Checkout repo
+        - uses: actions/checkout@v4
 
-      - name: Run Flyway Migrations
-        run: |
-          docker run --rm --volume ${{ github.workspace }}/migrations:/flyway/sql:ro redgate/flyway -url="jdbc:sqlserver://${{ needs.terraform.outputs.dbhost }};databaseName=BeanTrade;encrypt=false;trustServerCertificate=true;" -user="${{ secrets.TF_VAR_DB_USERNAME }}" -password="${{ secrets.TF_VAR_DB_PASSWORD }}" migrate
+        - name: Run Flyway Migrations
+          run: |
+            docker run --rm --volume ${{ github.workspace }}/migrations:/flyway/sql:ro redgate/flyway -url="jdbc:sqlserver://${{ needs.terraform.outputs.dbhost }};databaseName=BeanTrade;encrypt=false;trustServerCertificate=true;" -user="${{ secrets.TF_VAR_DB_USERNAME }}" -password="${{ secrets.TF_VAR_DB_PASSWORD }}" migrate
