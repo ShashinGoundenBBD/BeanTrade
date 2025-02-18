@@ -48,11 +48,10 @@ jobs:
           echo "db_host=$(terraform output -raw db_host)" >> $GITHUB_OUTPUT
   flyway:
     needs: terraform
-    name: Flyway migrations
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
-      - uses: actions/checkout@v4
+        uses: actions/checkout@v4
 
       - name: Run Flyway Migrations
         run: |
