@@ -51,8 +51,6 @@ jobs:
     name: Flyway migrations
     runs-on: ubuntu-latest
     steps:
-      - env:
-        DB_HOST: ${{needs.terraform.outputs.dbhost}}
       - name: Checkout repo
         uses: actions/checkout@v4
 
