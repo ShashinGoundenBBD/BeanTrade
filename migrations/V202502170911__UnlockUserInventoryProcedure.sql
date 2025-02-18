@@ -1,17 +1,17 @@
-CREATE PROCEDURE UnlockUserFunds
+CREATE PROCEDURE UnlockUserInventory
     @UserID INT,
-    @CurrencyCodeId INT,
-    @AmountToUnlock MONEY
+    @BeanID INT,
+    @QuantityToUnlock INT
 AS
 BEGIN
-    UPDATE Wallets 
-    SET LockedBalance = LockedBalance - @AmountToUnlock, Balance = Balance + @AmountToUnlock
+    UPDATE Inventory
+    SET LockedQuantity = LockedQuantity - @QuantityToUnlock, Quantity = Quantity + @QuantityToUnlock
     WHERE UserID = @UserID 
-    AND CurrencyCodeId = @CurrencyCodeId
+    AND BeanID = @BeanID
     
     IF @@ROWCOUNT = 0
     BEGIN
-        RAISERROR ('Invalid amount to unlock or insufficient funds', 16, 1);
+        RAISERROR ('Insufficient Inventory available to unlock', 16, 1);
     END
 END
 GO
