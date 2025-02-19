@@ -1,5 +1,5 @@
-IF OBJECT_ID('dbo.vw_Order_History', 'V') IS NOT NULL  
-    DROP VIEW [dbo].vw_Order_Historye;  
+IF OBJECT_ID('dbo.vw_OrderHistory', 'V') IS NOT NULL  
+    DROP VIEW [dbo].vw_OrderHistory;  
 GO
 
 SELECT OrderId, UserGuid, WalletGuid, 
